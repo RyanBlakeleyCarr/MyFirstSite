@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryan Carr | Personal Website</title>
+    <title>Ryan Carr | Software Engineer</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <header class="site-header">
         <nav class="nav-container">
-            <div class="logo">
-                <a href="/">Ryan Carr</a>
-            </div>
             <ul class="nav-links">
                 <li><a href="/" class="active">Home</a></li>
-                <li><a href="/blog">Blog</a></li>
+                <li><a href="/blog/">Blog</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
@@ -24,50 +21,82 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>Hi, I'm Ryan Carr</h1>
-                <p class="hero-text">Welcome to my corner of the internet. I write about technology, development, and my journey as a software engineer.</p>
-                <a href="/blog" class="cta-button">Read My Blog</a>
+                <div class="hero-text-container">
+                    <h1>Hi, I'm <span class="highlight">Ryan Carr</span></h1>
+                    <p class="hero-text">Software Engineer crafting elegant solutions to complex problems. 
+                    I write about technology, development, and my journey in software engineering.</p>
+                    <div class="hero-buttons">
+                        <a href="/blog/" class="cta-button">Read My Blog</a>
+                        <a href="/about" class="cta-button secondary">About Me</a>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">20+</span>
+                        <span class="stat-label">Projects Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Blog Posts</span>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="recent-posts">
-            <h2>Recent Blog Posts</h2>
+        <section class="featured-posts">
+            <div class="section-header">
+                <h2>Latest Posts</h2>
+                <a href="/blog/" class="view-all">View All Posts →</a>
+            </div>
             <div class="posts-grid">
-                <!-- Blog post previews will be dynamically inserted here -->
-                <article class="post-preview">
-                    <h3>Getting Started with Static Sites</h3>
-                    <p>Learn how to build a modern static website using HTML, CSS, and JavaScript...</p>
-                    <a href="/blog/getting-started" class="read-more">Read More →</a>
-                </article>
+                <!-- Posts will be dynamically inserted here -->
             </div>
         </section>
 
         <section class="newsletter">
-            <h2>Stay Updated</h2>
-            <p>Get notified when I publish new content.</p>
-            <form class="subscribe-form" id="subscribe-form">
-                <input type="email" placeholder="Your email address" required>
-                <button type="submit" class="cta-button">Subscribe</button>
-            </form>
+            <div class="newsletter-content">
+                <h2>Stay Updated</h2>
+                <p>Get notified when I publish new content. No spam, unsubscribe anytime.</p>
+                <form class="subscribe-form" id="subscribe-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" class="cta-button">Subscribe</button>
+                </form>
+            </div>
         </section>
     </main>
 
     <footer>
         <div class="footer-content">
-            <div class="footer-links">
-                <a href="/about">About</a>
-                <a href="/blog">Blog</a>
-                <a href="/contact">Contact</a>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Ryan Carr</h3>
+                    <p>Software Engineer & Technical Writer</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Navigation</h3>
+                    <div class="footer-links">
+                        <a href="/about">About</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/contact">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="https://github.com" target="_blank">GitHub</a>
+                        <a href="https://twitter.com" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                    </div>
+                </div>
             </div>
-            <div class="social-links">
-                <a href="https://github.com" target="_blank">GitHub</a>
-                <a href="https://twitter.com" target="_blank">Twitter</a>
-                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            <div class="footer-bottom">
+                <p class="copyright">© 2024 Ryan Carr. All rights reserved.</p>
             </div>
-            <p class="copyright">© 2024 Ryan Carr. All rights reserved.</p>
         </div>
     </footer>
-
-    <script src="/script.js"></script>
 </body>
 </html> 

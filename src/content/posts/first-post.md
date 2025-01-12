@@ -1,7 +1,8 @@
 ---
 title: My First Blog Post
-date: 2024-03-20
+date: 2024-03-19
 description: This is my first blog post using the new system
+category: Development
 ---
 
 # My First Blog Post
