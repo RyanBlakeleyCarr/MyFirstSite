@@ -1,4 +1,4 @@
-const marked = require('marked');
+const { marked } = require('marked');
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -10,8 +10,50 @@ marked.setOptions({
     headerIds: true
 });
 
+// Ensure dist directories exist
+function ensureDistDirs() {
+    const dirs = ['dist', 'dist/blog', 'dist/css'];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    });
+}
+
+// Copy static assets
+function copyStaticAssets() {
+    // Copy CSS with correct path
+    fs.copyFileSync('src/styles.css', 'dist/styles.css');
+    // Copy JavaScript
+    fs.copyFileSync('src/script.js', 'dist/script.js');
+    // Copy all HTML files from src
+    copyDir('src', 'dist', ['.html']);
+}
+
+// Helper function to copy directory contents
+function copyDir(src, dest, extensions) {
+    if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest, { recursive: true });
+    }
+
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+
+    for (const entry of entries) {
+        const srcPath = path.join(src, entry.name);
+        const destPath = path.join(dest, entry.name);
+
+        if (entry.isDirectory()) {
+            if (entry.name !== 'content' && entry.name !== 'templates') {
+                copyDir(srcPath, destPath, extensions);
+            }
+        } else if (extensions.some(ext => entry.name.endsWith(ext))) {
+            fs.copyFileSync(srcPath, destPath);
+        }
+    }
+}
+
 // Read the blog template
-const template = fs.readFileSync('templates/blog-template.html', 'utf-8');
+const template = fs.readFileSync('src/templates/blog-template.html', 'utf-8');
 
 // Function to parse frontmatter and content
 function parseMdFile(content) {
@@ -35,7 +77,7 @@ function formatDate(dateString) {
 // Convert a single markdown file
 function convertPost(filename) {
     const mdContent = fs.readFileSync(
-        path.join('content/posts', filename), 
+        path.join('src/content/posts', filename), 
         'utf-8'
     );
     
@@ -56,7 +98,7 @@ function convertPost(filename) {
     
     const htmlFilename = filename.replace('.md', '.html');
     fs.writeFileSync(
-        path.join('blog', htmlFilename),
+        path.join('dist/blog', htmlFilename),
         output
     );
     
@@ -70,8 +112,14 @@ function convertPost(filename) {
 
 // Convert all posts and update index
 function convertAll() {
+    // Ensure dist directories exist
+    ensureDistDirs();
+    
+    // Copy static assets
+    copyStaticAssets();
+    
     const posts = [];
-    const files = fs.readdirSync('content/posts');
+    const files = fs.readdirSync('src/content/posts');
     
     for (const file of files) {
         if (file.endsWith('.md')) {
@@ -82,9 +130,6 @@ function convertAll() {
     
     // Sort posts by date
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    // Update blog index
-    updateBlogIndex(posts);
 }
 
 convertAll(); 

@@ -3,35 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Project Files</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/blog">Blog</a>
-            <a href="/about">About</a>
-            <a href="/faq">FAQ</a>
-        </nav>
-    </header>
-
-    <main>
-        <h1>Welcome to My Blog</h1>
-        <section class="featured-posts">
-            <h2>Latest Posts</h2>
-            <div class="post-grid">
-                <article class="post-card">
-                    <h3><a href="/blog/first-post.html">My First Blog Post</a></h3>
-                    <p>This is my first blog post using the new system</p>
-                    <span class="date">March 20, 2024</span>
-                </article>
+    <div class="container">
+        <h1>Project Files</h1>
+        <div class="file-explorer">
+            <div class="folder">
+                <span class="folder-name">Site</span>
+                <div class="folder-content">
+                    <div class="file">.gitignore</div>
+                    <div class="file">package-lock.json</div>
+                    <div class="file">package.json</div>
+                    <div class="file">README.md</div>
+                    <div class="folder">
+                        <span class="folder-name">dist</span>
+                        <div class="folder-content collapsed"></div>
+                    </div>
+                    <div class="folder">
+                        <span class="folder-name">scripts</span>
+                        <div class="folder-content collapsed"></div>
+                    </div>
+                    <div class="folder">
+                        <span class="folder-name">node_modules</span>
+                        <div class="folder-content collapsed"></div>
+                    </div>
+                    <div class="folder">
+                        <span class="folder-name">src</span>
+                        <div class="folder-content collapsed"></div>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Your Name</p>
-    </footer>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html> 
