@@ -1,0 +1,16 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "A simple static blog",
+  "scripts": {
+    "build": "node scripts/convert.js",
+    "start": "serve"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "marked": "^4.0.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
