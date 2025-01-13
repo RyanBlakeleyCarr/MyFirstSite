@@ -11,6 +11,7 @@ async function build() {
         // Read all markdown files from content/posts
         const postsDir = path.join(__dirname, 'src/content/posts');
         const files = await fs.readdir(postsDir);
+        console.log('Found files:', files); // Add this line to see what files are found
         
         // Store post data for the index page
         const posts = [];
@@ -18,99 +19,119 @@ async function build() {
         // Process each markdown file
         for (const file of files) {
             if (path.extname(file) === '.md') {
-                const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
-                const { data, content: markdown } = matter(content);
+                console.log(`\nProcessing markdown file: ${file}`);
                 
-                // Debug logging
-                console.log('Processing file:', file);
-                console.log('Frontmatter data:', data);
+                const filePath = path.join(postsDir, file);
+                console.log('Full file path:', filePath);
                 
-                const html = marked(markdown);
-                
-                // Store post data for index
-                const slug = file.replace('.md', '');
-                posts.push({
-                    title: data.title || 'Untitled Post',
-                    date: data.date || new Date(),
-                    description: data.description || '',
-                    category: data.category || 'Development',
-                    slug,
-                    url: `/blog/${slug}/`
-                });
+                try {
+                    const content = await fs.readFile(filePath, 'utf-8');
+                    console.log('Raw file content:', content); // See exactly what we're reading
+                    
+                    // Explicitly parse frontmatter
+                    const parsed = matter(content);
+                    console.log('Matter output:', parsed); // See what matter() returns
+                    
+                    if (!parsed.data.title || !parsed.data.date || !parsed.data.description) {
+                        console.error('Missing required frontmatter in:', file);
+                        console.error('Parsed data:', parsed.data);
+                        continue;
+                    }
 
-                // Create blog post HTML
-                const postHTML = `
-                    <!DOCTYPE html>
-                    <html lang="en">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>${data.title || 'Untitled Post'} | Ryan Carr</title>
-                        <meta name="description" content="${data.description}">
-                        <link rel="stylesheet" href="/styles.css">
-                    </head>
-                    <body>
-                        <header class="site-header">
-                            <nav class="nav-container">
-                                <ul class="nav-links">
-                                    <li><a href="/">Home</a></li>
-                                    <li><a href="/blog/" class="active">Blog</a></li>
-                                    <li><a href="/about">About</a></li>
-                                    <li><a href="/contact">Contact</a></li>
-                                </ul>
-                            </nav>
-                        </header>
+                    const html = marked(parsed.content);
+                    
+                    // Store post data for index
+                    const slug = file.replace('.md', '');
+                    const post = {
+                        title: parsed.data.title,
+                        date: parsed.data.date,
+                        description: parsed.data.description,
+                        category: parsed.data.category || 'Development',
+                        slug,
+                        url: `/blog/${slug}/`
+                    };
+                    
+                    console.log('Created post object:', post);
+                    posts.push(post);
 
-                        <main>
-                            <article class="blog-post">
-                                <div class="post-header">
-                                    <h1>${data.title || 'Untitled Post'}</h1>
-                                    <time datetime="${data.date}">${new Date(data.date).toLocaleDateString()}</time>
-                                </div>
-                                <div class="post-content">
-                                    ${html}
-                                </div>
-                            </article>
-                        </main>
+                    // Create blog post HTML
+                    const postHTML = `
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>${parsed.data.title} | Ryan Carr</title>
+                            <meta name="description" content="${parsed.data.description}">
+                            <link rel="stylesheet" href="/styles.css">
+                        </head>
+                        <body>
+                            <header class="site-header">
+                                <nav class="nav-container">
+                                    <ul class="nav-links">
+                                        <li><a href="/">Home</a></li>
+                                        <li><a href="/blog/" class="active">Blog</a></li>
+                                        <li><a href="/about">About</a></li>
+                                        <li><a href="/contact">Contact</a></li>
+                                    </ul>
+                                </nav>
+                            </header>
 
-                        <footer>
-                            <div class="footer-content">
-                                <div class="footer-grid">
-                                    <div class="footer-section">
-                                        <h3>Ryan Carr</h3>
-                                        <p>Software Engineer & Technical Writer</p>
+                            <main>
+                                <article class="blog-post">
+                                    <div class="post-header">
+                                        <h1>${parsed.data.title}</h1>
+                                        <time datetime="${parsed.data.date}">${new Date(parsed.data.date).toLocaleDateString()}</time>
                                     </div>
-                                    <div class="footer-section">
-                                        <h3>Navigation</h3>
-                                        <div class="footer-links">
-                                            <a href="/about">About</a>
-                                            <a href="/blog/">Blog</a>
-                                            <a href="/contact">Contact</a>
+                                    <div class="post-content">
+                                        ${html}
+                                    </div>
+                                </article>
+                            </main>
+
+                            <footer>
+                                <div class="footer-content">
+                                    <div class="footer-grid">
+                                        <div class="footer-section">
+                                            <h3>Ryan Carr</h3>
+                                            <p>Software Engineer & Technical Writer</p>
+                                        </div>
+                                        <div class="footer-section">
+                                            <h3>Navigation</h3>
+                                            <div class="footer-links">
+                                                <a href="/about">About</a>
+                                                <a href="/blog/">Blog</a>
+                                                <a href="/contact">Contact</a>
+                                            </div>
+                                        </div>
+                                        <div class="footer-section">
+                                            <h3>Connect</h3>
+                                            <div class="social-links">
+                                                <a href="https://github.com" target="_blank">GitHub</a>
+                                                <a href="https://twitter.com" target="_blank">Twitter</a>
+                                                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="footer-section">
-                                        <h3>Connect</h3>
-                                        <div class="social-links">
-                                            <a href="https://github.com" target="_blank">GitHub</a>
-                                            <a href="https://twitter.com" target="_blank">Twitter</a>
-                                            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
-                                        </div>
+                                    <div class="footer-bottom">
+                                        <p class="copyright">© 2024 Ryan Carr. All rights reserved.</p>
                                     </div>
                                 </div>
-                                <div class="footer-bottom">
-                                    <p class="copyright">© 2024 Ryan Carr. All rights reserved.</p>
-                                </div>
-                            </div>
-                        </footer>
-                    </body>
-                    </html>
-                `;
+                            </footer>
+                        </body>
+                        </html>
+                    `;
 
-                // Debug logging
-                console.log('Creating post at:', `dist/blog/${slug}/index.html`);
-                
-                await fs.mkdir(`dist/blog/${slug}`, { recursive: true });
-                await fs.writeFile(`dist/blog/${slug}/index.html`, postHTML);
+                    // Create directory for the post if it doesn't exist
+                    const postDir = path.join('dist/blog', slug);
+                    await fs.mkdir(postDir, { recursive: true });
+
+                    // Write the post HTML file
+                    await fs.writeFile(path.join(postDir, 'index.html'), postHTML);
+                    console.log(`Created post: ${slug}`); // Debug log
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                }
             }
         }
 
